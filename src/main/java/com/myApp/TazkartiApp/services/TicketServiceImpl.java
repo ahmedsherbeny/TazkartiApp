@@ -1,6 +1,7 @@
 package com.myApp.TazkartiApp.services;
 
 import com.myApp.TazkartiApp.DTO.TicketDTO;
+import com.myApp.TazkartiApp.Enums.TicketStatus;
 import com.myApp.TazkartiApp.Repositories.EventRepository;
 import com.myApp.TazkartiApp.Repositories.UserRepository;
 import com.myApp.TazkartiApp.model.Event;
@@ -46,11 +47,13 @@ public class TicketServiceImpl implements TicketService {
         User user = userRepository.findById(ticketDTO.getUserId())
                 .orElseThrow(() -> new RuntimeException("User not found with id " + ticketDTO.getUserId()));
 
+
         Ticket ticket = new Ticket();
         ticket.setSeatNumber(ticketDTO.getSeatNumber());
         ticket.setPrice(ticketDTO.getPrice());
         ticket.setEvent(event);
         ticket.setUser(user);
+        ticket.setStatus(TicketStatus.AVAILABLE);
 
         Ticket savedTicket = ticketRepository.save(ticket);
         return mapToDTO(savedTicket);
@@ -119,5 +122,6 @@ public class TicketServiceImpl implements TicketService {
 
         return ticket;
     }
+
 
 }

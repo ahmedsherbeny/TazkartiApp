@@ -1,6 +1,8 @@
 package com.myApp.TazkartiApp.model;
+import com.myApp.TazkartiApp.Enums.UserRole;
 import jakarta.persistence.*;
 import lombok.*;
+
 import java.util.List;
 
 @Entity
@@ -21,4 +23,7 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Ticket> tickets ;
+
+//    @Enumerated(EnumType.STRING)
+//    private UserRole role;
 }

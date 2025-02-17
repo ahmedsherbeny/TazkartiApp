@@ -1,5 +1,7 @@
 package com.myApp.TazkartiApp.Controllers;
 
+import com.myApp.TazkartiApp.DTO.TicketBookingReq;
+import com.myApp.TazkartiApp.DTO.TicketDTO;
 import com.myApp.TazkartiApp.DTO.UserCreateDTO;
 import com.myApp.TazkartiApp.DTO.UserDTO;
 import com.myApp.TazkartiApp.services.UserService;
@@ -34,6 +36,15 @@ public class UserController {
     public ResponseEntity<UserCreateDTO> createUser(@Valid @RequestBody UserCreateDTO userDTO) {
         UserCreateDTO createdUser = userService.createUser(userDTO);
         return ResponseEntity.ok(createdUser);
+    }
+
+    @PostMapping("/{userId}/book/{eventId}")
+    public ResponseEntity<TicketDTO> bookTicket(
+            @PathVariable Long userId,
+            @PathVariable Long eventId,
+            @Valid@RequestBody TicketBookingReq ticketBookingReq) {
+        TicketDTO ticket = userService.bookTicket(userId, eventId, ticketBookingReq.getSeatNumber(),ticketBookingReq.getTicketId());
+        return ResponseEntity.ok(ticket);
     }
 
     @PutMapping("/{id}")

@@ -1,7 +1,13 @@
 package com.myApp.TazkartiApp.services;
 
+import com.myApp.TazkartiApp.DTO.TicketDTO;
 import com.myApp.TazkartiApp.DTO.UserCreateDTO;
 import com.myApp.TazkartiApp.DTO.UserDTO;
+import com.myApp.TazkartiApp.Enums.TicketStatus;
+import com.myApp.TazkartiApp.Repositories.EventRepository;
+import com.myApp.TazkartiApp.Repositories.TicketRepository;
+import com.myApp.TazkartiApp.model.Event;
+import com.myApp.TazkartiApp.model.Ticket;
 import com.myApp.TazkartiApp.model.User;
 import com.myApp.TazkartiApp.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +22,10 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private EventRepository eventRepository;
+    @Autowired
+    private TicketRepository ticketRepository;
 
     @Override
     public List<UserDTO> getAllUsers() {
@@ -54,6 +64,24 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteById(id);
     }
 
+    @Override
+    @Transactional
+    public TicketDTO bookTicket(Long userId, Long eventId, String seatNumber,Long ticketId){
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        Ticket ticket = ticketRepository.findById(ticketId).orElseThrow(() -> new RuntimeException("Ticket not found with id " + ticketId));
+        Event event = eventRepository.findById(eventId).orElseThrow(() -> new RuntimeException("Event not found"));
+        if (!ticket.getStatus().equals(TicketStatus.AVAILABLE)) {
+            throw new RuntimeException("This ticket is already booked");
+        }
+        ticket.setUser(user);
+        ticket.setEvent(event);
+        ticket.setSeatNumber(seatNumber);
+        ticket.setStatus(TicketStatus.BOOKED);
+
+        Ticket savedTicket = ticketRepository.save(ticket);
+        return new TicketDTO(savedTicket.getId(),seatNumber,savedTicket.getPrice(),userId,eventId,savedTicket.getStatus());
+    };
+
 
     private UserCreateDTO mapToDTO(User user) {
         return new UserCreateDTO(user.getId(), user.getUsername(), user.getEmail(), user.getPassword());
@@ -66,4 +94,7 @@ public class UserServiceImpl implements UserService {
     private User mapToEntity(UserCreateDTO userDTO) {
         return new User(null, userDTO.getUsername(), userDTO.getEmail(), userDTO.getPassword(),null);
     }
+
+
+
 }

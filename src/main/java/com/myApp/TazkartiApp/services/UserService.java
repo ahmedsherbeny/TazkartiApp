@@ -1,5 +1,6 @@
 package com.myApp.TazkartiApp.services;
 
+import com.myApp.TazkartiApp.DTO.TicketDTO;
 import com.myApp.TazkartiApp.DTO.UserCreateDTO;
 import com.myApp.TazkartiApp.DTO.UserDTO;
 
@@ -11,4 +12,5 @@ public interface UserService {
     UserCreateDTO createUser(UserCreateDTO userDTO);
     UserCreateDTO updateUser(Long id, UserCreateDTO userDTO);
     void deleteUser(Long id);
+    TicketDTO bookTicket(Long userId, Long eventId, String seatNumber,Long ticketId);
 }

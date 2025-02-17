@@ -1,7 +1,11 @@
 package com.myApp.TazkartiApp.model;
 
+import com.myApp.TazkartiApp.Enums.TicketStatus;
+import com.myApp.TazkartiApp.services.TicketServiceImpl;
 import lombok.*;
 import jakarta.persistence.*;
+
+import java.lang.reflect.Type;
 
 @Entity
 @Table(name = "tickets")
@@ -25,4 +29,9 @@ public class Ticket {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @Enumerated(EnumType.STRING)
+    private TicketStatus status;
 }
+
+

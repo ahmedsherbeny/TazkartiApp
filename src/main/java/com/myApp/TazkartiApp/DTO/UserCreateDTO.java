@@ -1,5 +1,6 @@
 package com.myApp.TazkartiApp.DTO;
 
+import com.myApp.TazkartiApp.Enums.UserRole;
 import lombok.*;
 
 @NoArgsConstructor
@@ -11,5 +12,6 @@ public class UserCreateDTO {
     private String username;
     private String email;
     private String password;
+  //  private UserRole role;
 }
 

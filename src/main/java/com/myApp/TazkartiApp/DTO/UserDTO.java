@@ -1,6 +1,7 @@
 package com.myApp.TazkartiApp.DTO;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.myApp.TazkartiApp.Enums.UserRole;
 import com.myApp.TazkartiApp.model.Ticket;
 import lombok.*;
 
@@ -16,5 +17,7 @@ public class UserDTO {
     private String email;
     @JsonIgnore
     private List<Ticket> tickets ;
+   // private UserRole role;
+
 }
 

@@ -1,5 +1,6 @@
 package com.myApp.TazkartiApp.DTO;
 
+import com.myApp.TazkartiApp.Enums.TicketStatus;
 import lombok.*;
 
 
@@ -12,4 +13,6 @@ public class TicketDTO {
     private Double price;
     private Long eventId;
     private Long userId;
+    private TicketStatus status;
+
 }
