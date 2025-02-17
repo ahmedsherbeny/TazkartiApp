@@ -80,7 +80,7 @@ public class UserServiceImpl implements UserService {
 
         Ticket savedTicket = ticketRepository.save(ticket);
         return new TicketDTO(savedTicket.getId(),seatNumber,savedTicket.getPrice(),userId,eventId,savedTicket.getStatus());
-    };
+    }
 
 
     private UserCreateDTO mapToDTO(User user) {
