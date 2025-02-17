@@ -2,6 +2,7 @@ package com.myApp.TazkartiApp.Controllers;
 
 import com.myApp.TazkartiApp.DTO.TicketDTO;
 import com.myApp.TazkartiApp.services.TicketService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,12 +27,12 @@ public class TicketController {
     }
 
     @PostMapping
-    public ResponseEntity<TicketDTO> createTicket(@RequestBody TicketDTO ticketDTO) {
+    public ResponseEntity<TicketDTO> createTicket(@Valid  @RequestBody TicketDTO ticketDTO) {
         return ResponseEntity.ok(ticketService.createTicket(ticketDTO));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TicketDTO> updateTicket(@PathVariable Long id, @RequestBody TicketDTO ticketDTO) {
+    public ResponseEntity<TicketDTO> updateTicket(@PathVariable Long id, @Valid @RequestBody TicketDTO ticketDTO) {
         return ResponseEntity.ok(ticketService.updateTicket(id, ticketDTO));
     }
 

@@ -6,6 +6,7 @@ import com.myApp.TazkartiApp.model.User;
 import com.myApp.TazkartiApp.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,6 +30,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public UserCreateDTO createUser(UserCreateDTO userDTO) {
         User user = mapToEntity(userDTO);
         user = userRepository.save(user);
@@ -36,6 +38,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public UserCreateDTO updateUser(Long id, UserCreateDTO userDTO) {
         User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
         user.setUsername(userDTO.getUsername());
@@ -46,20 +49,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }
 
-    // تحويل `User` إلى `UserDTO`
+
     private UserCreateDTO mapToDTO(User user) {
         return new UserCreateDTO(user.getId(), user.getUsername(), user.getEmail(), user.getPassword());
     }
     private UserDTO mapToUserDTO(User user) {
-        return new UserDTO(user.getId(), user.getUsername(), user.getEmail());
+        return new UserDTO(user.getId(), user.getUsername(), user.getEmail(),user.getTickets());
     }
 
-    // تحويل `UserDTO` إلى `User`
+
     private User mapToEntity(UserCreateDTO userDTO) {
-        return new User(null, userDTO.getUsername(), userDTO.getEmail(), userDTO.getPassword());
+        return new User(null, userDTO.getUsername(), userDTO.getEmail(), userDTO.getPassword(),null);
     }
 }

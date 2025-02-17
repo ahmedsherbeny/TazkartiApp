@@ -1,6 +1,10 @@
 package com.myApp.TazkartiApp.DTO;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.myApp.TazkartiApp.model.Ticket;
 import lombok.*;
+
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -10,6 +14,7 @@ public class UserDTO {
     private Long id;
     private String username;
     private String email;
-
+    @JsonIgnore
+    private List<Ticket> tickets ;
 }
 

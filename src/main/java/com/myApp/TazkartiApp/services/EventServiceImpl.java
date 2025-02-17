@@ -76,7 +76,9 @@ public class EventServiceImpl implements EventService {
                 event.getLocation(),
                 event.getEventDate(),
                 event.getDescription(),
-                event.getPrice()
+                event.getPrice(),
+                event.getTickets()
+
         );
     }
 
@@ -87,7 +89,9 @@ public class EventServiceImpl implements EventService {
                 dto.getLocation(),
                 dto.getEventDate(),
                 dto.getDescription(),
-                dto.getPrice()
+                dto.getPrice(),
+                dto.getTickets()
+
         );
     }
 }
