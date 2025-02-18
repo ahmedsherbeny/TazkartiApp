@@ -24,6 +24,6 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Ticket> tickets ;
 
-//    @Enumerated(EnumType.STRING)
-//    private UserRole role;
+   @Enumerated(EnumType.STRING)
+   private UserRole role;
 }

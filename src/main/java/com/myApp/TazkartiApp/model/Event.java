@@ -1,9 +1,10 @@
 package com.myApp.TazkartiApp.model;
 
+import com.myApp.TazkartiApp.Enums.EventType;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -21,11 +22,14 @@ public class Event {
 
     private String name;
     private String location;
-    private LocalDateTime eventDate;
+    private LocalDate eventDate;
 
     private String description;
     private Double price;
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Ticket> tickets;
+
+    @Enumerated(EnumType.STRING)
+    private EventType eventType;
 }

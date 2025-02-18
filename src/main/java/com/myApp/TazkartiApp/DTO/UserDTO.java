@@ -17,7 +17,7 @@ public class UserDTO {
     private String email;
     @JsonIgnore
     private List<Ticket> tickets ;
-   // private UserRole role;
+    private UserRole role;
 
 }
 

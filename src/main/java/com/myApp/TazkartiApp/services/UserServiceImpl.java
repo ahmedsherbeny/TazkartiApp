@@ -42,6 +42,16 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserCreateDTO createUser(UserCreateDTO userDTO) {
+        if (userDTO.getUsername() == null || userDTO.getUsername().isEmpty()) {
+            throw new RuntimeException("Username is required");
+        }
+        if (userDTO.getEmail() == null || userDTO.getEmail().isEmpty()) {
+            throw new RuntimeException("User Email is required");
+        }
+        if (userDTO.getPassword() == null || userDTO.getPassword().isEmpty()) {
+            throw new RuntimeException("User Password is required");
+        }
+
         User user = mapToEntity(userDTO);
         user = userRepository.save(user);
         return mapToDTO(user);
@@ -51,18 +61,34 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserCreateDTO updateUser(Long id, UserCreateDTO userDTO) {
         User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
-        user.setUsername(userDTO.getUsername());
-        user.setEmail(userDTO.getEmail());
-
+        if (userDTO.getUsername() == null || userDTO.getUsername().isEmpty()) {
+            throw new RuntimeException("Username is required");
+        }else {
+            user.setUsername(userDTO.getUsername());
+        }
+        if (userDTO.getEmail() == null || userDTO.getEmail().isEmpty()) {
+            throw new RuntimeException("User Email is required");
+        }else {
+            user.setEmail(userDTO.getEmail());
+        }
+        if (userDTO.getPassword() == null || userDTO.getPassword().isEmpty()) {
+            throw new RuntimeException("User Password is required");
+        }else {
+            user.setPassword(userDTO.getPassword());
+        }
+        if (userDTO.getRole()==null|| userDTO.getRole().toString().isEmpty()){
+            throw new RuntimeException("User Role is required");
+        }else {
+            user.setRole(userDTO.getRole());
+        }
+        // save to database
         user = userRepository.save(user);
         return mapToDTO(user);
     }
 
     @Override
     @Transactional
-    public void deleteUser(Long id) {
-        userRepository.deleteById(id);
-    }
+    public void deleteUser(Long id) {userRepository.deleteById(id);}
 
     @Override
     @Transactional
@@ -84,15 +110,15 @@ public class UserServiceImpl implements UserService {
 
 
     private UserCreateDTO mapToDTO(User user) {
-        return new UserCreateDTO(user.getId(), user.getUsername(), user.getEmail(), user.getPassword());
+        return new UserCreateDTO(user.getId(), user.getUsername(), user.getEmail(), user.getPassword(),user.getRole());
     }
     private UserDTO mapToUserDTO(User user) {
-        return new UserDTO(user.getId(), user.getUsername(), user.getEmail(),user.getTickets());
+        return new UserDTO(user.getId(), user.getUsername(), user.getEmail(),user.getTickets(),user.getRole());
     }
 
 
     private User mapToEntity(UserCreateDTO userDTO) {
-        return new User(null, userDTO.getUsername(), userDTO.getEmail(), userDTO.getPassword(),null);
+        return new User(null, userDTO.getUsername(), userDTO.getEmail(), userDTO.getPassword(),null, userDTO.getRole());
     }
 
 
