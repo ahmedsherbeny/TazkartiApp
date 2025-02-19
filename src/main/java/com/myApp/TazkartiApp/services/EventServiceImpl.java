@@ -44,6 +44,9 @@ public class EventServiceImpl implements EventService {
         if (eventDTO.getEventDate() == null) {
             throw new RuntimeException("Event date is required");
         }
+        if (eventDTO.getClock() == null) {
+            throw new RuntimeException("Event clock is required");
+        }
         if (eventDTO.getDescription() == null ) {
             throw new RuntimeException("Event Description Cant be empty");
         }
@@ -61,40 +64,18 @@ public class EventServiceImpl implements EventService {
         Event event = eventRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Event not found with id " + id));
 
-       if (eventDTO.getName() != null) {
-           event.setName(eventDTO.getName());
-       } else {
-            throw new RuntimeException("Event name cannot be null");
-       }
-        if (eventDTO.getLocation() != null) {
-            event.setLocation(eventDTO.getLocation());
-        }else {
-            throw new RuntimeException("Event Location cannot be null");
-        }
-        if (eventDTO.getEventDate() != null) {
-            event.setEventDate(eventDTO.getEventDate());
-        }else {
-            throw new RuntimeException("Event Date cannot be null");
-        }
-        if (eventDTO.getDescription() != null) {
-            event.setDescription(eventDTO.getDescription());
-        }else {
-            throw new RuntimeException("Event Description cannot be null");
-        }
-        if (eventDTO.getPrice() != null) {
-            event.setPrice(eventDTO.getPrice());
-        }else {
-            throw new RuntimeException("Event Price cannot be null");
-        }
-        if (eventDTO.getEventType() != null) {
-            event.setEventType(eventDTO.getEventType());
-        }else {
-            throw new RuntimeException("Event Type cannot be null");
-        }
+        if (eventDTO.getName() != null) event.setName(eventDTO.getName());
+        if (eventDTO.getLocation() != null) event.setLocation(eventDTO.getLocation());
+        if (eventDTO.getEventDate() != null) event.setEventDate(eventDTO.getEventDate());
+        if (eventDTO.getClock() != null) event.setClock(eventDTO.getClock());
+        if (eventDTO.getDescription() != null) event.setDescription(eventDTO.getDescription());
+        if (eventDTO.getPrice() != null) event.setPrice(eventDTO.getPrice());
+        if (eventDTO.getEventType() != null) event.setEventType(eventDTO.getEventType());
 
         Event updatedEvent = eventRepository.save(event);
         return mapToDTO(updatedEvent);
     }
+
 
     @Override
     @Transactional
@@ -105,10 +86,10 @@ public class EventServiceImpl implements EventService {
     }
 
     private EventDTO mapToDTO(Event event) {
-        return new EventDTO(event.getId(),event.getName(), event.getLocation(), event.getEventDate(), event.getDescription(), event.getPrice(), event.getTickets(), event.getEventType());
+        return new EventDTO(event.getId(),event.getName(), event.getLocation(), event.getEventDate(),event.getClock(), event.getDescription(), event.getPrice() , event.getEventType());
     }
 
     private Event mapToEntity(EventDTO dto) {
-        return new Event(dto.getId(), dto.getName(),dto.getLocation(), dto.getEventDate(), dto.getDescription(), dto.getPrice(), dto.getTickets(), dto.getEventType());
+        return new Event(dto.getId(), dto.getName(),dto.getLocation(), dto.getEventDate(),dto.getClock(),dto.getDescription(), dto.getPrice(), dto.getEventType());
     }
 }

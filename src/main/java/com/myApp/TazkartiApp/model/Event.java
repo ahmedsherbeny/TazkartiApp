@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @Entity
@@ -23,12 +24,9 @@ public class Event {
     private String name;
     private String location;
     private LocalDate eventDate;
-
+    private LocalTime clock ;
     private String description;
     private Double price;
-
-    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Ticket> tickets;
 
     @Enumerated(EnumType.STRING)
     private EventType eventType;

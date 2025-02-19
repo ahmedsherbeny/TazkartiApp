@@ -60,31 +60,26 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserCreateDTO updateUser(Long id, UserCreateDTO userDTO) {
-        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
-        if (userDTO.getUsername() == null || userDTO.getUsername().isEmpty()) {
-            throw new RuntimeException("Username is required");
-        }else {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (userDTO.getUsername() != null && !userDTO.getUsername().isEmpty()) {
             user.setUsername(userDTO.getUsername());
         }
-        if (userDTO.getEmail() == null || userDTO.getEmail().isEmpty()) {
-            throw new RuntimeException("User Email is required");
-        }else {
+        if (userDTO.getEmail() != null && !userDTO.getEmail().isEmpty()) {
             user.setEmail(userDTO.getEmail());
         }
-        if (userDTO.getPassword() == null || userDTO.getPassword().isEmpty()) {
-            throw new RuntimeException("User Password is required");
-        }else {
+        if (userDTO.getPassword() != null && !userDTO.getPassword().isEmpty()) {
             user.setPassword(userDTO.getPassword());
         }
-        if (userDTO.getRole()==null|| userDTO.getRole().toString().isEmpty()){
-            throw new RuntimeException("User Role is required");
-        }else {
+        if (userDTO.getRole() != null) {
             user.setRole(userDTO.getRole());
         }
-        // save to database
-        user = userRepository.save(user);
-        return mapToDTO(user);
+
+        User updatedUser = userRepository.save(user);
+        return mapToDTO(updatedUser);
     }
+
 
     @Override
     @Transactional
@@ -105,7 +100,7 @@ public class UserServiceImpl implements UserService {
         ticket.setStatus(TicketStatus.BOOKED);
 
         Ticket savedTicket = ticketRepository.save(ticket);
-        return new TicketDTO(savedTicket.getId(),seatNumber,savedTicket.getPrice(),userId,eventId,savedTicket.getStatus());
+        return new TicketDTO(savedTicket.getId(),seatNumber,savedTicket.getPrice(),savedTicket.getClock(),userId,eventId,savedTicket.getStatus());
     }
 
 
