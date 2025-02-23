@@ -9,6 +9,4 @@ import lombok.Data;
 public class TicketBookingReq {
     @NotNull
     private String seatNumber;
-    @NotNull
-    private Long ticketId;
 }

@@ -17,6 +17,4 @@ public class TicketDTO {
     private Long eventId;
     private Long userId;
     private TicketStatus status;
-
-
 }

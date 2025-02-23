@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
 import java.util.List;
 
 @RestController
@@ -39,11 +40,11 @@ public class UserController {
     }
 
     @PostMapping("/{userId}/book/{eventId}")
-    public ResponseEntity<TicketDTO> bookTicket(
+    public ResponseEntity <List<TicketDTO>> bookTicket(
             @PathVariable Long userId,
             @PathVariable Long eventId,
-            @Valid@RequestBody TicketBookingReq ticketBookingReq) {
-        TicketDTO ticket = userService.bookTicket(userId, eventId, ticketBookingReq.getSeatNumber(),ticketBookingReq.getTicketId());
+            @Valid@RequestBody Collection<TicketBookingReq> ticketBookingReq) {
+       List<TicketDTO>  ticket = userService.bookTicket(userId, eventId,ticketBookingReq);
         return ResponseEntity.ok(ticket);
     }
 

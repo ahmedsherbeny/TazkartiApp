@@ -1,5 +1,6 @@
 package com.myApp.TazkartiApp.Controllers;
 
+import com.myApp.TazkartiApp.DTO.TicketCreateDTO;
 import com.myApp.TazkartiApp.DTO.TicketDTO;
 import com.myApp.TazkartiApp.services.TicketService;
 import jakarta.validation.Valid;
@@ -27,18 +28,19 @@ public class TicketController {
     }
 
     @PostMapping
-    public ResponseEntity<TicketDTO> createTicket(@Valid  @RequestBody TicketDTO ticketDTO) {
+    public ResponseEntity<TicketDTO> createTicket(@Valid  @RequestBody TicketCreateDTO ticketDTO ) {
         return ResponseEntity.ok(ticketService.createTicket(ticketDTO));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TicketDTO> updateTicket(@PathVariable Long id, @Valid @RequestBody TicketDTO ticketDTO) {
+    public ResponseEntity<TicketDTO> updateTicket(@PathVariable Long id, @Valid @RequestBody TicketCreateDTO ticketDTO) {
         return ResponseEntity.ok(ticketService.updateTicket(id, ticketDTO));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTicket(@PathVariable Long id) {
-        ticketService.deleteTicket(id);
+    public ResponseEntity<Void> deleteTicket(@PathVariable Long id, @RequestParam Long adminId) {
+        ticketService.deleteTicket(id, adminId);
         return ResponseEntity.noContent().build();
     }
+
 }

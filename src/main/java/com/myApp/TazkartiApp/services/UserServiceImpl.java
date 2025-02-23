@@ -1,5 +1,6 @@
 package com.myApp.TazkartiApp.services;
 
+import com.myApp.TazkartiApp.DTO.TicketBookingReq;
 import com.myApp.TazkartiApp.DTO.TicketDTO;
 import com.myApp.TazkartiApp.DTO.UserCreateDTO;
 import com.myApp.TazkartiApp.DTO.UserDTO;
@@ -14,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -87,25 +90,53 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public TicketDTO bookTicket(Long userId, Long eventId, String seatNumber,Long ticketId){
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
-        Ticket ticket = ticketRepository.findById(ticketId).orElseThrow(() -> new RuntimeException("Ticket not found with id " + ticketId));
-        Event event = eventRepository.findById(eventId).orElseThrow(() -> new RuntimeException("Event not found"));
-        if (!ticket.getStatus().equals(TicketStatus.AVAILABLE)) {
-            throw new RuntimeException("This ticket is already booked");
-        }
-        ticket.setUser(user);
-        ticket.setEvent(event);
-        ticket.setSeatNumber(seatNumber);
-        ticket.setStatus(TicketStatus.BOOKED);
+  public List<TicketDTO> bookTicket(Long userId, Long eventId, Collection<TicketBookingReq> ticketRequests){
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new RuntimeException("Event not found"));
 
-        Ticket savedTicket = ticketRepository.save(ticket);
-        return new TicketDTO(savedTicket.getId(),seatNumber,savedTicket.getPrice(),savedTicket.getClock(),userId,eventId,savedTicket.getStatus());
+        List<TicketDTO> bookedTickets = new ArrayList<>();
+
+        for (TicketBookingReq ticketRequest : ticketRequests) {
+            Ticket ticket = ticketRepository.findBySeatNumberAndEventId(ticketRequest.getSeatNumber(),eventId)
+                    .orElseThrow(() -> new RuntimeException("Ticket not available with this seat number  " + ticketRequest.getSeatNumber()));
+
+            if (!ticket.getStatus().equals(TicketStatus.AVAILABLE)) {
+                throw new RuntimeException("Ticket with id " + ticket.getSeatNumber() + " is already booked");
+            }
+
+            ticket.setUser(user);
+            ticket.setEvent(event);
+            ticket.setSeatNumber(ticketRequest.getSeatNumber());
+            ticket.setStatus(TicketStatus.BOOKED);
+
+            Ticket savedTicket = ticketRepository.save(ticket);
+            bookedTickets.add(new TicketDTO(
+                    savedTicket.getId(),
+                    savedTicket.getSeatNumber(),
+                    savedTicket.getPrice(),
+                    savedTicket.getClock(),
+                    userId,
+                    eventId,
+                    savedTicket.getStatus()
+            ));
+        }
+
+        return bookedTickets;
     }
 
 
-    private UserCreateDTO mapToDTO(User user) {
-        return new UserCreateDTO(user.getId(), user.getUsername(), user.getEmail(), user.getPassword(),user.getRole());
+
+    private UserCreateDTO mapToDTO(User user)
+    {
+        UserCreateDTO userDTO = new UserCreateDTO();
+        userDTO.setUsername(user.getUsername());
+        userDTO.setEmail(user.getEmail());
+        userDTO.setPassword(user.getPassword());
+        userDTO.setRole(user.getRole());
+
+        return userDTO;
     }
     private UserDTO mapToUserDTO(User user) {
         return new UserDTO(user.getId(), user.getUsername(), user.getEmail(),user.getTickets(),user.getRole());
